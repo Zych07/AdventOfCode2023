@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Xml;
 
 namespace AdventOfCode2023
 {
@@ -34,45 +35,21 @@ namespace AdventOfCode2023
 
         public long Part2(string[] lines)
         {
-            string[] numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-
-            int sum = 0;
+            string[] numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            List<string> newInput = [];
 
             foreach (var line in lines)
             {
-                int firstNumber = -1;
-                int lastNumber = -1;
-
+                string newLine = "";
                 for (int i = 0; i < line.Length; i++)
-                {
-                    if (int.TryParse(line[i].ToString(), out int number))
-                    {
-                        if (firstNumber == -1)
-                            firstNumber = number;
+                    for (int j = 0; j < numbers.Length; j++)
+                        if (line.IndexOf(numbers[j], i) == i)
+                            newLine += j % 10;
 
-                        lastNumber = number;
-                    }
-                    else
-                    {
-
-                        for (int j = 0; j < numbers.Length; j++)
-                        {
-                            if ( i + numbers[j].Length <= line.Length && line.Substring(i, numbers[j].Length) == numbers[j])
-                            {
-                                if (firstNumber == -1)
-                                    firstNumber = j;
-
-                                lastNumber = j;
-                                break;
-                            }
-                        }
-                    }
-
-                }
-                sum += firstNumber * 10 + lastNumber;
+                newInput.Add(newLine);
             }
-            
-            return sum;
+
+            return Part1([.. newInput]);
         }
     }
 }
