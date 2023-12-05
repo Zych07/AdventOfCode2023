@@ -141,9 +141,10 @@ namespace AdventOfCode2023
             _maps.Add(currentMap);
 
             List<Thread> threads = new();
+            List<long> minValue = new();
             foreach (var seed in seeds)
             {
-                Thread t = new Thread(() => CalculateSeed(seed))
+                Thread t = new Thread(() => minValue.Add(CalculateSeed(seed)))
                 {
                     Name = seed.Start.ToString()
                 };
@@ -152,15 +153,14 @@ namespace AdventOfCode2023
 
             foreach (var t in threads)
                 t.Start();
+            foreach (var t in threads)
+                t.Join();
 
-            Console.WriteLine("Main Thread Ended");
-            Console.Read();
-            return -1;
+            return minValue.Min();
         }
 
         private long CalculateSeed(Seed seed)
         {
-            Console.WriteLine("Method1 Started using " + Thread.CurrentThread.Name);
             int progress = 0;
             long lowestLocation = long.MaxValue;
             for (long s = seed.Start; s < seed.Start + seed.Lenght; s++)
@@ -182,10 +182,9 @@ namespace AdventOfCode2023
                 if (s % (long)(seed.Lenght / 100) == 0)
                 {
                     progress++;
-                    Console.WriteLine(progress);
+                    Console.WriteLine(Thread.CurrentThread.Name + " " + progress + "%");
                 }
             }
-            Console.WriteLine("L: " + lowestLocation);
             return lowestLocation;
         }
 
