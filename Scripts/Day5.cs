@@ -179,11 +179,11 @@ namespace AdventOfCode2023
                 if (currentValue < lowestLocation)
                     lowestLocation = currentValue;
 
-                if (s % (long)(seed.Lenght / 100) == 0)
+                /*if (s % (long)(seed.Lenght / 100) == 0)
                 {
                     progress++;
                     Console.WriteLine(Thread.CurrentThread.Name + " " + progress + "%");
-                }
+                }*/
             }
             return lowestLocation;
         }
