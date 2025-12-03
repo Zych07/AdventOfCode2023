@@ -22,18 +22,18 @@ namespace AdventOfCode2023
             HEIGHT = lines.Count();
             WIDTH = lines[0].Count();
 
-            Graph g = new Graph(lines.Length * lines[0].Length);
+            Graph g = new Graph(lines.Length * lines[0].Length + 1);
 
             (int, int) starting = (0, 0);
 
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < HEIGHT; i++)
             {
-                for (int j = 0; j < lines[i].Length; j++)
+                for (int j = 0; j < WIDTH; j++)
                 {
                     switch (lines[i][j])
                     {
                         case '|':
-                            if (i - 1 >= 0 && i + 1 < lines.Length)
+                            if (i - 1 >= 0 && i + 1 < HEIGHT)
                                 if (IsDown(lines[i - 1][j]) && IsUp(lines[i + 1][j]))
                                 {
                                     g.AddEdge((i - 1, j), (i, j));
@@ -41,7 +41,7 @@ namespace AdventOfCode2023
                                 }
                             break;
                         case '-':
-                            if (j - 1 >= 0 && j + 1 < lines[i].Length)
+                            if (j - 1 >= 0 && j + 1 < WIDTH)
                                 if (IsRight(lines[i][j - 1]) && IsLeft(lines[i][j + 1]))
                                 {
                                     g.AddEdge((i, j - 1), (i, j));
@@ -49,7 +49,7 @@ namespace AdventOfCode2023
                                 }
                             break;
                         case 'L':
-                            if (i - 1 >= 0 && j + 1 < lines[i].Length)
+                            if (i - 1 >= 0 && j + 1 < WIDTH)
                                 if (IsDown(lines[i - 1][j]) && IsLeft(lines[i][j + 1]))
                                 {
                                     g.AddEdge((i - 1, j), (i, j));
@@ -65,7 +65,7 @@ namespace AdventOfCode2023
                                 }
                             break;
                         case '7':
-                            if (j - 1 >= 0 && i + 1 < lines.Length)
+                            if (j - 1 >= 0 && i + 1 < HEIGHT)
                                 if (IsUp(lines[i + 1][j]) && IsRight(lines[i][j - 1]))
                                 {
                                     g.AddEdge((i, j - 1), (i, j));
@@ -73,7 +73,7 @@ namespace AdventOfCode2023
                                 }
                             break;
                         case 'F':
-                            if (j + 1 < lines.Length && i + 1 < lines.Length)
+                            if (j + 1 < WIDTH && i + 1 < HEIGHT)
                                 if (IsUp(lines[i + 1][j]) && IsLeft(lines[i][j + 1]))
                                 {
                                     g.AddEdge((i, j + 1), (i, j));
@@ -138,11 +138,6 @@ namespace AdventOfCode2023
                 adj[u.Item1 * HEIGHT + u.Item2].Add(v);
                 adj[v.Item1 * HEIGHT + v.Item2].Add(u);
             }
-            public void RemoveEdge((int, int) u, (int, int) v)
-            {
-                adj[u.Item1 * HEIGHT + u.Item2].Remove(v);
-                adj[v.Item1 * HEIGHT + v.Item2].Remove(u);
-            }
 
             private void DFSHelper((int, int) src, bool[] visited, int[] distances, int depth)
             {
@@ -179,8 +174,23 @@ namespace AdventOfCode2023
             public int DFS((int, int) starting)
             {
                 int[] distances = new int[V];
-                bool[] visited = new bool[adj.Length + 1];
+                bool[] visited = new bool[WIDTH * HEIGHT];
                 DFSHelper(starting, visited, distances, 0);
+
+                for (int i = 0; i < HEIGHT; i++)
+                {
+                    Console.WriteLine("");
+
+                    for (int j = 0; j < WIDTH; j++)
+                    {
+                        if (visited[i * HEIGHT + j])
+                            Console.Write(distances[i*HEIGHT + j].ToString() + '\t');
+                        else 
+                            Console.Write("X"+ '\t');
+                    }
+                    Console.WriteLine("");
+
+                }
 
                 return distances.Max();
             }
