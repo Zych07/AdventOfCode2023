@@ -52,13 +52,11 @@ namespace AdventOfCode2023
         public long Part2(string[] lines)
         {
             char STARTING_NODE_LAST_CHAR = 'A';
-            char ENDING_NODE_LAST_CHAR = 'Z';
+            List<int> loopsWithOffset = new();
 
             string steps = lines[0];
 
             Dictionary<string, (string, string)> nodeInfo = new();
-            Dictionary<string, List<int>> cyclesHelper = new();
-
             List<string> currentNodes = new();
 
             for (int i = 2; i < lines.Length; i++)
@@ -74,20 +72,61 @@ namespace AdventOfCode2023
 
             int currentStep = 0;
 
-            while (!currentNodes.All(x => x.Last() == ENDING_NODE_LAST_CHAR))
+            for (int i = 0; i < currentNodes.Count; i++)
             {
-                char direction = steps[currentStep % steps.Length];
-                for (int i = 0; i < currentNodes.Count; i++)
+                currentStep = 0;
+                Dictionary<string, List<int>> cyclesHelper = new();
+
+                while (true)
                 {
+
+                    char direction = steps[currentStep % steps.Length];
+                    currentStep++;
+
                     if (direction == 'L')
                         currentNodes[i] = nodeInfo[currentNodes[i]].Item1;
                     else
                         currentNodes[i] = nodeInfo[currentNodes[i]].Item2;
-                }
-                currentStep++;
-            }
 
-            return currentStep;
+                    if (!cyclesHelper.ContainsKey(currentNodes[i]))
+                    {
+                        var l = new List<int>();
+                        l.Add(currentStep);
+                        cyclesHelper.Add(currentNodes[i], l);
+                    }
+                    else
+                    {
+                        if (cyclesHelper[currentNodes[i]].Contains(currentStep % steps.Length))
+                        {
+                            loopsWithOffset.Add(currentStep - currentStep % steps.Length);
+                            break;
+                        }
+                        cyclesHelper[currentNodes[i]].Add(currentStep);
+                    }
+                }
+            }
+            return LCM(loopsWithOffset);
+        }
+
+        private long GCF(long a, long b)
+        {
+            while (b != 0)
+            {
+                long temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+        private long LCM(long a, long b) => (a / GCF(a, b)) * b;
+        private long LCM(List<int> numbs)
+        {
+            long sum = numbs[0];
+
+            for(int i=1; i<numbs.Count; i++)
+                sum = LCM(sum, numbs[i]);
+
+            return sum;
         }
     }
 }
