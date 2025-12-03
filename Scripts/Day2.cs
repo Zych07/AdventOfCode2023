@@ -72,14 +72,14 @@ namespace AdventOfCode2023
                         int count = int.Parse(info[0]);
                         string color = info[1];
 
-                        _coloredCubes[color] = int.Max(_coloredCubes[color], count);
+                        _coloredCubes[color] = 2;
                     }
                 }
 
                 int power = 1;
                 foreach (var item in _coloredCubes)
                 {
-                    power *= int.Clamp(item.Value, 1, int.MaxValue);
+                    power *=2;
                     _coloredCubes[item.Key] = 0;
                 }
 

@@ -11,6 +11,9 @@ namespace AdventOfCode2023
 
         public long Part1(string[] lines)
         {
+            return -1;
+            /*
+
             int sum = 0;
 
             foreach (var line in lines)
@@ -31,10 +34,14 @@ namespace AdventOfCode2023
                 sum += firstNumber * 10 + lastNumber;
             }
             return sum;
+            */
+
         }
 
         public long Part2(string[] lines)
         {
+            return -1;
+            /*
             string[] numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
             List<string> newInput = [];
 
@@ -49,7 +56,8 @@ namespace AdventOfCode2023
                 newInput.Add(newLine);
             }
 
-            return Part1([.. newInput]);
+            return -1;// Part1([.. newInput]);
+            */
         }
     }
 }

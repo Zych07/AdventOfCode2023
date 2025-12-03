@@ -57,6 +57,7 @@ namespace AdventOfCode2023
             string steps = lines[0];
 
             Dictionary<string, (string, string)> nodeInfo = new();
+            Dictionary<string, List<int>> cyclesHelper = new();
 
             List<string> currentNodes = new();
 
@@ -67,7 +68,8 @@ namespace AdventOfCode2023
                 nodeInfo.Add(s[0], (lr[0], lr[1]));
 
                 if (s[0].Last() == STARTING_NODE_LAST_CHAR)
-                    currentNodes.Add(s[0]);
+                    if (currentNodes.Count == 0)
+                        currentNodes.Add(s[0]);
             }
 
             int currentStep = 0;
@@ -82,10 +84,7 @@ namespace AdventOfCode2023
                     else
                         currentNodes[i] = nodeInfo[currentNodes[i]].Item2;
                 }
-
                 currentStep++;
-                if (currentStep % 1000 == 0)
-                    Console.WriteLine(currentStep);
             }
 
             return currentStep;
